@@ -1,11 +1,20 @@
+import 'dotenv/config';
 import app from "./app.js";
 import logger from './logs/logger.js';
-import 'dotenv/config';
+import config from './config/env.js'
+import { sequelize } from './database/database.js';
 
 async function main() {
-    app.listen(process.env.PORT); 
-    console.log('Server running on http://localhost:'+process.env.PORT);
+    await sequelize.sync({force:true});
+ 
+    const port=config.PORT;
+    app.listen(port);
+    //app.listen(process.env.PORT); 
+    console.log('Server running on http://localhost:'+port);
+    logger.error('This error');
     logger.info('corriendo en 300');
 }
 
 main();
+
+
