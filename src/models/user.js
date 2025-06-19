@@ -53,6 +53,17 @@ User.beforeCreate(async(user)=>{
         user.password= await encriptar(user.password);
     } catch (error) {
         logger.error(error);
-        throw new Error('Error al encriptar antes de registrar');
+        //throw new Error('Error al encriptar antes de registrar');
+        next(error);
+    }
+});
+
+User.beforeUpdate(async(user)=>{
+    try {
+         user.password= await encriptar(user.password);
+        
+    } catch (error) {
+        logger.error(error);
+        next(error);
     }
 });

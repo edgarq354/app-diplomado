@@ -5,7 +5,7 @@ import config from './config/env.js'
 import { sequelize } from './database/database.js';
 
 async function main() {
-    await sequelize.sync({force:true});
+    await sequelize.sync({force:false}); //para persistir el cambio
  
     const port=config.PORT;
     app.listen(port);
