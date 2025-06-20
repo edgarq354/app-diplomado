@@ -11,8 +11,8 @@ async function main() {
     app.listen(port);
     //app.listen(process.env.PORT); 
     console.log('Server running on http://localhost:'+port);
-    logger.error('This error');
-    logger.info('corriendo en 300');
+    //logger.error('This error');
+    logger.info('corriendo en '+port);
 }
 
 main();
