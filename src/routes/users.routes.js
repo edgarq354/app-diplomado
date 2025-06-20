@@ -22,4 +22,7 @@ router.route('/:id')
 
 router.get('/:id/tasks',authenticateToken, userController.getTasks);
 
+// Nueva ruta para paginación
+router.get('/list/pagination',  userController.getUsersPagination);
+
 export default router;

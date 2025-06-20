@@ -143,6 +143,65 @@ async function getTasks(req, res, next) {
 }
 
 
+
+async function getUsersPagination(req, res, next) {
+    try {
+        // Obtener parámetros de consulta con valores por defecto
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const search = req.query.search || '';
+        const orderBy = req.query.orderBy || 'id';
+        const orderDir = req.query.orderDir || 'DESC';
+
+        // Validar valores de limit
+        const validLimits = [5, 10, 15, 20];
+        const finalLimit = validLimits.includes(limit) ? limit : 10;
+
+        // Validar orderBy
+        const validOrderBy = ['id', 'username', 'status'];
+        const finalOrderBy = validOrderBy.includes(orderBy) ? orderBy : 'id';
+
+        // Validar orderDir
+        const finalOrderDir = orderDir.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
+        // Configurar opciones de consulta
+        const options = {
+            attributes: ['id', 'username', 'status'],
+            where: {
+                status: Status.ACTIVE
+            },
+            order: [[finalOrderBy, finalOrderDir]],
+            offset: (page - 1) * finalLimit,
+            limit: finalLimit
+        };
+
+        // Agregar búsqueda si existe
+        if (search) {
+            options.where.username = {
+                [Op.iLike]: `%${search}%`
+            };
+        }
+
+        // Obtener datos y total de registros
+        const { count, rows } = await User.findAndCountAll(options);
+
+        // Calcular total de páginas
+        const pages = Math.ceil(count / finalLimit);
+
+        // Construir respuesta
+        const response = {
+            total: count,
+            page: page,
+            pages: pages,
+            data: rows
+        };
+
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export default{
     getUsers,
     createUser,
@@ -150,5 +209,6 @@ export default{
     updateUser,
     deleteUser,
     activateInactivate, 
-    getTasks
+    getTasks,
+    getUsersPagination
 };
