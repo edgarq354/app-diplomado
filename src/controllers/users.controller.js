@@ -4,6 +4,8 @@ import logger from "../logs/logger.js";
 import { Status } from "../constants/index.js";
 import { encriptar } from '../common/bcrypt.js'; 
 
+import { Op } from 'sequelize';
+
 async function getUsers(req,res,next ){
     try{
         const users = await User.findAll({
@@ -152,6 +154,12 @@ async function getUsersPagination(req, res, next) {
         const search = req.query.search || '';
         const orderBy = req.query.orderBy || 'id';
         const orderDir = req.query.orderDir || 'DESC';
+        console.log('page: '+page);
+        console.log('limit: '+limit);
+        console.log('search: '+search);
+        console.log('orderBy: '+orderBy);
+        console.log('orderDir: '+orderDir);
+
 
         // Validar valores de limit
         const validLimits = [5, 10, 15, 20];
