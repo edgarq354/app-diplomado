@@ -3,7 +3,6 @@ import { Task } from "../models/task.js";
 import logger from "../logs/logger.js";
 import { Status } from "../constants/index.js";
 import { encriptar } from '../common/bcrypt.js'; 
-
 import { Op } from 'sequelize';
 
 async function getUsers(req,res,next ){
